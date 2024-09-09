@@ -1,0 +1,38 @@
+<!-- I wrote this code --> 
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+<div class="my-4 p-4 bg-body rounded shadow">
+  <h4><small class="text-body-secondary">Update Profile Picture</small></h4>
+<div class="row pt-3">
+  {% include 'components/profile_update_sidenav.html' %}
+  <div class="col">
+      <div class="card p-3">  
+        <form class="form-update-user-profile-picture" method="post" enctype="multipart/form-data">
+          <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+          <h5>Profile Picture</h5>
+          <p>                      
+          {% if profile_picture %}
+            <img class="avatar-img rounded-circle border border-white border-3" src="{{profile_picture.url}}" alt="">
+          {% else %}
+            {% load static %}
+            <img class="avatar-img rounded-circle border border-white border-3" src="{% static 'images/avatar.png' %}" alt="">
+          {% endif %}</p>
+          <p>
+            <label class="mr-2" for="id_image">Choose new profile picture:</label>
+            {{form.profile_picture}}
+          </p>
+          <button class="btn btn-warning" type="submit">Save</button>
+        </form>
+      
+  </div>
+
+</div>
+</div>
+
+{% else %} {% endif %}
+
+{% endblock %}
+<!-- end of code I wrote -->

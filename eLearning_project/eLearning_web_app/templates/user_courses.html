@@ -1,0 +1,35 @@
+<!-- I wrote this code --> 
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="my-4 p-4 bg-body rounded shadow">
+  <div style="display: flex;
+    justify-content: space-between;">
+  <h4><small class="text-body-secondary">My Courses</small></h4>
+  {% if current_is_teacher %} 
+  <a href="/add-courses" class="btn btn-warning" type="button">Add Course</a>
+  {% endif %}
+  </div>
+
+  
+  <div style="margin-top: 25px;"  class="list-group">
+  {% for course in courses %}
+   <a href="/course/{{course.course_id}}" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
+    <div class="d-flex gap-2 w-100 justify-content-between">
+      <div>
+        <h6 class="mb-0">{{course.title}}</h6>
+        <p class="mb-0 opacity-75">{{course.description}}</p>
+      </div>
+      <small class="opacity-50 text-nowrap">{{course.due_date}}</small>
+    </div>
+  </a> 
+
+  {% endfor %}
+  {% if not courses %}  
+  You are currently not enrolled to any courses. <a href="/search-courses">Find Courses</a> 
+  {% endif %}
+  </div>
+</div>
+{% endblock %}
+<!-- end of code I wrote -->

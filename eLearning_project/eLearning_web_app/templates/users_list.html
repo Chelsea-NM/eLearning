@@ -1,0 +1,90 @@
+<!-- I wrote this code --> 
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="my-4 p-4 bg-body rounded shadow">
+  <h4><small class="text-body-secondary">Search Users</small></h4>
+  <div style="margin-top: 25px;"  class="">
+      <div class="input-group">
+          <span class="input-group-text" id="basic-addon1">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"></path>
+          </svg>
+          </span>
+          <input type="text" class="form-control" id="tbSearchUsers" placeholder="Enter search phrase..." aria-label="Input group example" aria-describedby="basic-addon1">
+          <button type="button" style="color:white" class="btn btn-warning btnsearch">Search</button>
+        </div>
+  </div>
+  <br/>
+
+{% if current_user.is_authenticated %}
+<table class="table user">
+    <thead>
+      <tr>
+        <th style="width:60px" scope="col"></th>
+        <th scope="col">Username</th>
+        <th scope="col">Firstname</th>
+        <th scope="col">Lastname</th>
+        <th scope="col">Type</th>
+        <th style="width:80px" scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+
+
+    </tbody>
+  </table>
+</div>
+  {% else %}
+
+{% endif %}
+{% endblock %}
+{% block jquery %}
+<script type="text/javascript"> window.CSRF_TOKEN = "{{ csrf_token }}"; </script>
+<script type="text/javascript">
+     
+     function load_users(){
+            // ajax request to the myplace_api to search for users
+        $.ajax({
+        type: "GET",
+        url : "http://127.0.0.1:8000/api/getuserslist/",
+        data:  {"csrfmiddlewaretoken": window.CSRF_TOKEN, "user_id":"{{user.id}}",'searchterm': $("#tbSearchUsers").val() },
+        dataType: "json",
+        success : function (data) {
+          var users_list = data['users_list']
+          //$(".dvfinduser").find(".friend").remove();
+          var hostname = 'http://' + window.location.hostname;
+          $(".table.user").find("tbody").html('')
+          // iterate through each friend and dynamically add html for each friend
+          container = 
+          $.each(users_list, function(index, user){
+            var row = $("<tr></tr>");
+            var profile_pic = $('<td><img height="40" width="40" class="avatar-2em me-2 rounded-circle" src="'+user.profile_picture+'" alt=""></td>')
+            var username = $("<td>"+user.username+"</td>")
+            var firstname = $("<td>"+user.first_name+"</td>")
+            var lastname = $("<td>"+user.last_name+"</td>")
+            var usertype = $("<td>"+user.usertype+"</td>")
+            var view = $("<td><a href='/user/profile/"+user.id+"'>View</a></td>")
+            row.append(profile_pic).append(username).append(firstname).append(lastname).append(usertype).append(view);
+            $(".table.user").find("tbody").append(row)
+          });
+
+          
+        },
+        error: function(data){
+          console.log(data)
+        }
+      });
+    }   
+
+  $(document).ready(
+    //bind events when the html document has been fully loaded   
+    $(".btnsearch").click( function() {
+      load_users();
+    }),
+    load_users()  
+  );
+  
+</script>
+{% endblock %}
+<!-- end of code I wrote -->

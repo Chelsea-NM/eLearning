@@ -1,0 +1,66 @@
+<!-- I wrote this code -->
+{% extends 'empty.html' %} {% block content %}
+<div class="form-signup w-100 m-auto">
+  {% load static %} 
+       
+<img
+src="{% static 'images/logo.png' %}"
+alt="Logo"
+class="bi mb-2 logo"
+role="img"
+width="240px"
+aria-label="Bootstrap"
+/>
+<form action="/signup" method="post">
+  {% csrf_token %}
+  {{ form }}
+
+  <!-- check if sign up form has any failed validation errors -->
+  {% if form.errors %}
+  {% for key, value in form.errors.items %}
+    {% for error in value %}
+      <label style="color:red;display: block;"> {{ error }}</label>
+    {% endfor %}
+  {% endfor %}
+  {% endif %}  
+
+  <div class="row" style="margin: 20px 0px 20px 0px">
+  
+    <div class="col" style="text-align: center;">
+      <img
+src="{% static 'images/student.png' %}"
+alt="Logo"
+class="bi mb-2 logo"
+role="img"
+width="54px"
+aria-label="Bootstrap"
+/>
+
+      <input class="form-check-input" type="radio" name="radiousertype" id="radiousertypestudent" value="1" aria-label="..." checked>
+      <label for="radioUserTypeStudent">Student</label>
+    </div>
+    <div class="col" style="text-align: center;">
+      <img
+      src="{% static 'images/teacher.png' %}"
+      alt="Logo"
+      class="bi mb-2 logo"
+      role="img"
+      width="54px"
+      aria-label="Bootstrap"
+      />
+
+      
+      <input class="form-check-input" type="radio" name="radiousertype" id="radiousertypeteacher" value="2" aria-label="...">
+      <label for="radioUserTypeTeacher">Teacher</label>
+    </div>
+  </div>
+
+  <button style="color:white;font-size: 16px;" class="btn btn-warning mt-2" type="submit">Sign Up</button>
+</form>
+
+
+<p class="text-center">All ready have an account? <a href="/signin">Login</a>.</p>
+</div>
+
+{% endblock %}
+<!-- end of code I wrote -->

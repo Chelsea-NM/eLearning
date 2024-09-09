@@ -1,0 +1,182 @@
+<!-- I wrote this code -->
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+
+<div class="row dvfriends">
+  <div class="col">
+    {% if listtype == 'myfriends' %}
+    <div class="my-3 p-3 bg-body rounded shadow-sm">
+      <h6 class="border-bottom pb-2 mb-0">My Friends</h6>
+      {% for friend in my_friends_list %}
+      <div class="friend d-flex text-body-secondary pt-3">
+        <a href="/user/profile/{{ friend.id }}">
+          {% load static %}
+          {% if friend.profile_picture %}
+          <img class="avatar-2em me-2 rounded-circle" src="{{friend.profile_picture}}" alt="">
+          {% else %}
+          {% load static %}
+          <img class="avatar-2em  me-2 rounded-circle" src="{% static 'images/avatar.png' %}" alt="">
+          {% endif %}
+        </a>
+        <div class="infocontainer pb-3 mb-0 lh-sm border-bottom">
+          <strong class="username d-block text-gray-dark">{{friend.username}}</strong>
+          <div class="info d-block">{% if friend.first_name %}{{friend.first_name}} {{friend.last_name}}, {% endif %}Joined: {{friend.date_joined}} </div>
+        </div>
+        <div class="buttoncontainer">
+          <a href="/user/{{ user.id }}/chat/{{ friend.id }}" class="btn btn-outline-success me-1 d-inline-block">Chat</a>
+          <a href="/user/profile/{{ friend.id }}" class="btn btn-outline-info d-inline-block" href="#">View Profile</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    
+    <div class="my-3 p-3 bg-body rounded shadow-sm">
+      <h6 class="border-bottom pb-2 mb-0">Friend Requests</h6>
+      {% for friend in friend_requests_list %}
+      <div class="friend d-flex text-body-secondary pt-3">
+        <a href="/user/profile/{{ friend.id }}">
+          {% load static %}
+          {% if friend.profile_picture %}
+          <img class="avatar-2em me-2 rounded-circle" src="{{friend.profile_picture}}" alt="">
+          {% else %}
+          {% load static %}
+          <img class="avatar-2em  me-2 rounded-circle" src="{% static 'images/avatar.png' %}" alt="">
+          {% endif %}
+        </a>
+        <div class="infocontainer pb-3 mb-0 lh-sm border-bottom">
+          <strong class="username d-block text-gray-dark">{{friend.username}}</strong>
+          <div class="info d-block">{% if friend.first_name %}{{friend.first_name}} {{friend.last_name}}, {% endif %}Joined: {{friend.date_joined}} </div>
+        </div>
+        <div class="buttoncontainer">
+          {% if friend.invitee %}               
+            <div contact_id="{{friend.contact_id}}" class="btn btn-outline-success me-1 btnAcceptFriendRequest">Accept</div>
+          {% else %}
+            <div class="btn btn-warning me-1">Invite Pending</div>    
+          {% endif %}
+            <a href="/user/profile/{{ friend.id }}" class="btn btn-outline-info d-inline-block">View Profile</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    {% else %}
+
+    <div class="dvfinduser my-3 p-3 bg-body rounded shadow-sm">
+      <h6 class="border-bottom pb-2 mb-0">Find Users</h6>
+      <input style="width: 240px;" type="text" class="form-control mt-2 mb-2 d-inline-block" name="searchusers" id="tbSearchUsers" /> <button type="button" class="btn btn-outline-primary mb-1 btsearchusers d-inline-block">Search</button>
+      {% for friend in suggested_friends_list %}
+      <div class="friend d-flex text-body-secondary pt-3">
+        <a href="/user/profile/{{ friend.id }}">
+          {% load static %}
+          {% if friend.profile_picture %}
+          <img class="avatar-2em me-2 rounded-circle" src="{{friend.profile_picture}}" alt="">
+          {% else %}
+          {% load static %}
+          <img class="avatar-2em  me-2 rounded-circle" src="{% static 'images/avatar.png' %}" alt="">
+          {% endif %}
+        </a>
+        <div class="infocontainer pb-3 mb-0 lh-sm border-bottom">
+          <strong class="username d-block text-gray-dark">{{friend.username}}</strong>
+          <div class="info d-block">{% if friend.first_name %}{{friend.first_name}} {{friend.last_name}}, {% endif %}Joined: {{friend.date_joined}} </div>
+        </div>
+        <div class="buttoncontainer">
+          <button class="btn btn-outline-success btnaddfriend" user_id="{{ friend.id }}" type="button"> <i class="bi bi-person-fill-add pe-1"></i>Add Friend</button>
+          <a href="/user/profile/{{ friend.id }}" class="btn btn-outline-info d-inline-block">View Profile</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+  </div>
+</div>
+{% else %} {% endif %}
+
+{% endblock %}
+{% block jquery %}
+<script type="text/javascript"> window.CSRF_TOKEN = "{{ csrf_token }}"; </script>
+<script type="text/javascript">
+      
+  $(document).ready(
+    //bind events when the html document has been fully loaded
+
+    $(".btsearchusers").click( function() {
+      // ajax request to the myplace_api to search for users
+      $.ajax({
+        type: "GET",
+        url : "http://127.0.0.1:8000/api/getfriendlists/",
+        data:  {"csrfmiddlewaretoken": window.CSRF_TOKEN, "user_id":"{{user.id}}",'searchterm': $("#tbSearchUsers").val() },
+        dataType: "json",
+        success : function (data) {
+          var friend_list = data['contact_list']
+          $(".dvfinduser").find(".friend").remove();
+          var hostname = 'http://' + window.location.hostname;
+
+          // iterate through each friend and dynamically add html for each friend
+          $.each(friend_list, function(index, friend){
+            if(friend.type == 'suggested_friends_list')
+            {
+
+              var container = $("<div class='friend d-flex text-body-secondary pt-3'></div>");
+
+              var profile_pic_container = $("<a href='/user/profile/"+friend.id+"''></a>");
+              var pp_url = "/static/images/avatar.png";
+              if(friend.profile_picture != '')
+                pp_url = friend.profile_picture;
+              var profile_pic = $("<img class='avatar-2em  me-2 rounded-circle' src='"+pp_url+"' alt='' />")
+              profile_pic_container.append(profile_pic);
+              container.append(profile_pic_container);
+
+              var profile_info_container = $("<div class='infocontainer pb-3 mb-0 lh-sm border-bottom'></div>")
+              var profile_info_name = $("<strong class='username d-block text-gray-dark'>"+friend.username+"</strong>")  
+              var other_info_str = "";
+              if(friend.first_name != "")
+                other_info_str += friend.first_name + " " + friend.last_name + " ";
+              other_info_str += "Joined: "+friend.date_joined;
+              var profile_info_other = $("<div class='info d-block'>"+other_info_str+"</div>");              
+              profile_info_container.append(profile_info_name);
+              profile_info_container.append(profile_info_other);
+              container.append(profile_info_container);
+
+              var btn_container = $("<div class='buttoncontainer'></div>");
+              var btn_view_profile = $("<button id='btnAddFriend' class='btn btn-outline-success ml-2' type='button'> <i class='bi bi-person-fill-add pe-1'></i>Add Friend</button>");
+              var btn_add_friend = $("<a href='/user/profile/"+friend.id+"' class='btn btn-outline-info d-inline-block'>View Profile</a>");
+              btn_container.append(btn_view_profile);
+              btn_container.append(btn_add_friend);
+              container.append(btn_container);
+              
+              $(".dvfinduser").append(container);
+
+            }          
+          });
+        },
+        error: function(data){
+          
+        }
+      });
+    }),
+    $(".btnaddfriend").click( function() {
+      // ajax request to the myplace_api to create a contact/friend request
+      $.ajax({
+        type: "POST",
+        url : "http://127.0.0.1:8000/api/addcontact/",
+        data:  {"csrfmiddlewaretoken": window.CSRF_TOKEN, "created_by_id":"{{user.id}}", "user_id":$(this).attr('user_id') },
+        dataType: "json",
+        success : function (data) {
+          window.location.reload();
+        },
+        error: function(data){
+        }
+      });
+    }),
+    $(".btnAcceptFriendRequest").click( function() {
+      // ajax request to the myplace_api to accept a contact/friend request
+
+    })
+  );
+</script>
+{% endblock %}
+<!-- end of code I wrote -->

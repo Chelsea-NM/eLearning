@@ -1,0 +1,202 @@
+<!-- I wrote this code --> 
+{% extends 'base.html' %}
+
+{% block content %}
+{% if current_user.is_authenticated %}
+<div class="row">
+    <!-- PROFILE CARD START -->
+    <div class="col">
+        <div class="my-3 bg-body rounded shadow">
+        
+            <div class="h-50px rounded-top" style="background-color:#6610f2; background-position: center; background-size: cover; background-repeat: no-repeat;"></div>
+               
+                    <div class="text-center  rounded">
+                    <!-- Avatar -->
+                    <div class="avatar avatar-lg dvavatar mb-3">
+                        {% load static %}
+                        {% if owner_user_profile.profile_picture %}
+                        <img class="avatar-img rounded" src="{{owner_user_profile.profile_picture.url}}" alt="">
+                        {% else %}
+                        {% load static %}
+                        <img class="avatar-img rounded" src="{% static 'images/avatar.png' %}" alt="">
+                        {% endif %}
+                    </div>
+
+                    <h5 style="color:#212529bf">{{ owner_user.username }}</h5>
+               
+                    <div class="justify-content-center rounded-bottom">                        
+                        <ul class="list-group list-group-flush user_info">
+                            <li class="list-group-item">About</li>
+                            <li class="list-group-item">{{owner_usertype}}</li>
+                            {% if owner_user.first_name %}
+                                <li class="list-group-item">
+                                {{owner_user.first_name}} 
+                                {% if owner_user.last_name %}
+                                {{owner_user.last_name}} 
+                                {% endif %}
+                            </li>
+                            {% endif %}
+                            {% if owner_user.email %}<li class="list-group-item">{{owner_user.email}}</li>{% endif %}
+                            {% if owner_user_profile.occupation %}<li class="list-group-item">{{owner_user_profile.occupation}}</li>{% endif %}
+                            {% if owner_user_profile.dob %}<li class="list-group-item">Birthday: {{owner_user_profile.dob}}</li>{% endif %}
+                            {% if is_owner %}<li class="list-group-item"><a href="/user/profile/{{owner_user.id}}/update/details">Update</a></li>{% endif %}
+                            
+                        </ul>
+                    </div>                
+            </div>        
+    </div>
+    </div>
+    <!-- PROFILE CARD END -->
+
+    <!-- POST CARD START -->
+    <div class="col-6 ">
+        {% if is_owner %}
+        <div class="card card-body  my-3 ">
+            <div class="d-flex mb-3">
+                <!-- Post input -->
+                <form class="w-100">
+                    <textarea id="taPostMessage" class="form-control pe-4 border-0" rows="2" data-autoresize="" maxlength="255" placeholder="Share your thoughts..."></textarea>
+                </form>
+            </div>
+            <!-- Share feed toolbar START -->
+
+            <ul style="margin-left: auto;" class="nav nav-pills nav-stack small fw-normal">
+                <form id="formCreateStatusUpdate">
+                    <input style="width: 200px; margin-top: 5px;" type="file" id="post_media_file" />
+                </form>
+                <li style="display: none;" class="nav-item">
+                    <a class="nav-link bg-light py-1 px-2 mb-0" href="#!" data-bs-toggle="modal" data-bs-target="#feedActionPhoto"> <i class="bi bi-image-fill text-success pe-2"></i>Photo</a>
+                </li>
+                <button class="btn btn-warning btncreatestatusupdate" type="button"> <i class="bi bi-pencil-fill pe-1"></i> Post </button>                    
+            </ul>
+            <div class="post_error" style="color:red;"></div>
+            <!-- Share feed toolbar END  media_image-->
+        </div>
+        {% endif %}
+        
+        <div class="dvposts" >
+            {% for status_update in status_updates %}
+                <div class="my-3 p-3 bg-body rounded shadow-sm">
+                    <a class="d-inline-block" style="width: 8%;" href="/user/profile/{{ post.created_by_id }}">
+                        {% load static %}
+                        {% if owner_user_profile.profile_picture %}
+                        <img class="avatar-2em me-2 rounded-circle" src="{{owner_user_profile.profile_picture.url}}" alt="">
+                        {% else %}
+                        {% load static %}
+                        <img class="avatar-2em  me-2 rounded-circle" src="{% static 'images/avatar.png' %}" alt="">
+                        {% endif %}
+                      </a>
+                      <div class="infocontainer d-inline-block pb-3 mb-0 lh-sm">
+                        <strong class="username d-block mb-1 text-gray-dark">{{owner_user.username}}</strong><div class="post_create_date">{{status_update.created_date}}</div>
+                        <div class="info d-block">{{status_update.message}} </div>
+                        {% load static %}
+                        {% if status_update.media_image %}
+                        <div class="info d-block"><img style="max-width: 50%;" class="me-2 mt-2" src="{{status_update.media_image}}" alt=""/></div>
+                        {% else %}
+                        {% endif %}
+                      </div>
+                    
+                </div>
+            {% endfor %}
+            {% if not status_updates %}
+            <h6 class="pb-2 mb-0 mt-3 text-center">No Status Updates</h6>
+            {% endif %}
+        </div>
+        
+    </div>
+
+    <div class="col">
+        <div class="my-3 p-3 bg-body rounded shadow row_enrolled_user">
+            <h6 class="border-bottom pb-2 mb-0">Courses</h6>
+            {% for course in courses %}
+            <div class="pb-2 pt-2 mb-0 border-bottom row_material">
+                <strong class="text-gray-dark mb-1 username">
+                    <a href="/course/{{course.course_id}}">{{course.title}}</a>
+                </strong>
+                {% if course.due_date %}
+                    <div style="font-size: 12px;">Due: {{course.due_date}}</div>
+                {% endif %}
+            </div>
+            {% endfor %}  
+            {% if not courses %}   
+            <div class="pb-2 pt-2 mb-0 row_material">   
+                 <a href="/search-courses">No courses found - search now </a>
+            </div>    
+            {% endif %}   
+        </div>
+        <div class="my-3 p-3 bg-body rounded shadow row_enrolled_user">
+            <h6 class="border-bottom pb-2 mb-0">Alerts</h6>
+            {% for a in alert_list %}
+            <div class="pb-2 pt-2 mb-0 border-bottom row_material">
+                <strong class="text-gray-dark mb-1 username">
+                    {{a.message}}
+                </strong>
+                <div style="font-size: 12px;">{{a.created_date}}</div>                
+            </div>
+            {% endfor %}  
+            {% if not alert_list %}   
+            <div class="pb-2 pt-2 mb-0 row_material">   
+                 <a>No alerts</a>
+            </div>    
+            {% endif %}   
+        </div>
+    </div>
+  </div>
+{% else %}
+
+{% endif %}
+{% endblock %}
+
+{% block jquery %}
+<script type="text/javascript"> window.CSRF_TOKEN = "{{ csrf_token }}"; </script>
+<script type="text/javascript">
+      
+  $(document).ready(
+    //bind events when the html document has been fully loaded
+    $(".btncreatestatusupdate").click( function() {
+      // ajax request to the myplace_api to create a user post
+      //formCreatePost
+      if($("#taPostMessage").val() == '')
+      {
+        $(".post_error").html("Can't post an empty thought")
+        return;
+      }
+      $(".post_error").html("");
+      var post_media_file = ''
+      try{        
+        post_media_file = $("#post_media_file").prop('files')[0];
+      }catch(e){
+
+      }
+      var data_obj = {"csrfmiddlewaretoken": window.CSRF_TOKEN, "created_by_id":"{{current_user.id}}","created_by_username":"{{current_user.username}}", "message":$("#taPostMessage").val(),"media_image_file":post_media_file};
+
+
+      var form_data = new FormData();
+      var file_data = $("#post_media_file").prop('files')[0];
+
+      form_data.append('csrfmiddlewaretoken', window.CSRF_TOKEN);
+      form_data.append('created_by_id', "{{current_user.id}}");
+      form_data.append('created_by_username', "{{current_user.username}}");
+      form_data.append('message', $("#taPostMessage").val());
+      form_data.append('media_image_file', file_data);
+      
+      $.ajax({
+        type: "POST",
+        url : "http://127.0.0.1:8000/api/createstatusupdate/",
+        data:  form_data,
+        cache:false,
+        dataType: "json",
+        processData: false,
+        contentType: false,
+        success : function (data) {
+          window.location.reload();
+        },
+        error: function(data){
+        }
+      });
+    })
+
+  );
+</script>
+{% endblock %}
+<!-- end of code I wrote -->

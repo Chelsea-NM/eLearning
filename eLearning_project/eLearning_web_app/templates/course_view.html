@@ -1,0 +1,281 @@
+<!-- I wrote this code --> 
+{% extends 'base.html' %}
+
+{% block content %}
+{% if current_user.is_authenticated %}
+
+<div class="course row">
+    <div style="display: flex;
+    justify-content: space-between;">
+     <h4><small class="text-body-secondary">{{course.title}}</small></h4>
+     {% if not is_enrolled %}      
+        {% if not is_blocked %} 
+        {% if not current_is_teacher %} <button style="color:white" class="btn btn-warning btnenrollcourse" type="button">Enroll</button>{% endif %}
+        {% endif %}
+     {% endif %}
+     </div>
+     <br/>
+    <div class="col">
+        <div class="my-3 p-3 bg-body rounded shadow">
+            <h6 class="border-bottom pb-2 mb-0">Course Details</h6>
+            {% if is_blocked %} 
+            <span class="badge mt-3 rounded-pill text-bg-danger">
+                You are currently blocked from viewing this course!
+            </span>
+            {% endif %}
+            {% if course.description %}
+            <p class="pt-2 mb-2"><label class="lbldesc">Description:</label>{{course.description}}</p>
+            {% endif %}
+            {% if course.category %}
+            <p class="pt-2 mb-2"><label class="lbldesc">Category:</label>{{course.category}}</p>
+            {% endif %}
+            {% if owner_user %}
+            <p class="pt-2 mb-2"><label class="lbldesc">Created By:</label><a href="/user/profile/{{owner_user.id}}">{{owner_user.username}}</a></p>
+            {% endif %}
+            {% if course.due_date %}
+            <p class="pt-2 mb-2"><label class="lbldesc">Due Date:</label><span class="badge rounded-pill text-bg-warning">{{course.due_date}}</span></p>
+            {% endif %}
+            {% if not current_is_teacher %} 
+                {% if usercourse %} 
+                    <p class="pt-2 mb-2"><label class="lbldesc me-2">Enrollment Date:</label><span class="badge rounded-pill text-bg-light">{{course.due_date}}</span></p>    
+                {% endif %}    
+            {% endif %} 
+            
+            {% if is_enrolled %}  
+            <small class="d-block text-end mt-3">
+                <a href="/course/{{ course.course_id }}/chat-room/" class="btn btn-light" style="background-color: #6528e0;color:white;display:inline-block;margin-right: 10px;" type="submit">Live Chat</a>
+            {% if is_owner %}            
+                <a href="/course/{{ course.course_id }}/update" class="btn btn-warning" type="button">Update</a>       
+            {% endif %}
+            </small> 
+            {% endif %}      
+
+        </div>
+       
+        {% if is_enrolled %}
+        <div class="my-3 p-3 bg-body rounded shadow">
+            <h6 class="border-bottom pb-2 mb-0">Course Material</h6>
+            {% for material in course_material %}
+            <div class="pb-3 pt-3 mb-0 small lh-sm border-bottom row_material">
+                <strong class="d-block text-gray-dark mb-1 username">
+                    {{material.title}}
+                </strong>
+                {{material.description}}
+                <div class="mt-2">
+                {% if material.file_name %}
+                <a class="mt-1" target="_blank" href="{{material.file_name.url}}">Download</a>
+                {% endif %}                
+                {% if is_course_creator %}
+                <small course_material_id="{{material.course_material_id}}" class="mt-1 btnremovematerial" style="font-size: 14px;text-decoration: underline;cursor: pointer;margin-left: 10px;float:right;">Delete</small>
+                {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+            {% if not course_material %}   
+            <div class="pb-2 pt-2 mb-0 row_material">   
+                 <a style="    font-size: 13px !important;
+                 font-weight: bold !important;
+                 color: #212529bf !important;">No course material</a>
+            </div>    
+            {% endif %}   
+            {% if is_course_creator %}
+            <small class="d-block text-end mt-3">
+                <a href="/course/{{ course.course_id }}/material/add" class="btn btn-warning" type="button">Add</a>
+            </small>
+            {% endif %}
+
+        </div>
+        {% endif %}
+        
+    </div>                    
+    
+    <div class="col col-lg-6">
+        <div class="my-3 p-3 bg-body rounded shadow row_enrolled_user">
+            <h6 class="border-bottom pb-2 mb-0">Students Enrolled</h6>
+            {% for student in course_students %}
+            <div class="pb-2 pt-2 mb-0 border-bottom row_material d-flex justify-content-between">
+                <strong class="text-gray-dark mb-1 username">
+                    <a href="/user/profile/{{student.id}}">{{student.username}}</a>
+                </strong>
+                <div>
+                    {% if is_course_creator %}
+                        {% if student.status == 'Active' %}
+                        <small class="d-inline-block">
+                            <div class="btn_status block" user_course_id="{{student.user_course_id}}">Block</div>
+                        </small>
+                        <span class="badge text-bg-success d-inline-block">{{student.status}}</span>
+                        {% else %}
+                        <small class="d-inline-block">
+                            <div class="btn_status unblock" user_course_id="{{student.user_course_id}}">Unblock</div>
+                        </small>
+                        <span class="badge text-bg-danger d-inline-block">{{student.status}}</span>
+                        {% endif %}
+                    {% endif %}
+                    
+                </div>
+            </div>
+            {% endfor %}  
+            {% if not course_students %}   
+            <div class="pb-2 pt-2 mb-0 row_material">   
+                 <a>No students enrolled</a>
+            </div>    
+            {% endif %}             
+            <small class="d-block text-end mt-3"></small>
+        </div>
+        <div class="my-3 p-3 bg-body rounded shadow">
+            <h6 class="border-bottom pb-2 mb-0">Feedback</h6>
+            <div class="course_feedback"></div>
+            {% if is_enrolled %}
+            <div class="card card-body mt-3">
+                <div class="d-flex mb-3">
+                    <!-- Post input -->
+                    <form class="w-100">
+                        <textarea id="taPostMessage" class="form-control pe-4 border-0" rows="1" data-autoresize="" maxlength="255" placeholder="Share your feedback..."></textarea>
+                    </form>
+                </div>
+                <!-- Share feed toolbar START -->    
+                <ul style="margin-left: auto;" class="nav nav-pills nav-stack small fw-normal">
+                    <button class="btn btn-warning btnaddcoursefeedback" type="button"> <i class="bi bi-pencil-fill pe-1"></i>Post</button>                    
+                </ul>
+                <div class="post_error" style="color:red;"></div>
+                <!-- Share feed toolbar END  media_image-->
+            </div>
+            <small class="d-block text-end mt-3"></small>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% else %}
+
+{% endif %}
+{% endblock %}
+{% block jquery %}
+<script type="text/javascript"> window.CSRF_TOKEN = "{{ csrf_token }}"; </script>
+<script type="text/javascript">
+    
+  function enroll_course(){
+    $.ajax({
+    type: "POST",
+    url : "http://127.0.0.1:8000/api/usercourse/",
+    data:  {"csrfmiddlewaretoken": window.CSRF_TOKEN, "created_by_id":"{{current_user.id}}",'course_id': "{{course.course_id}}"},
+    dataType: "json",
+    success : function (data) {
+      window.location.reload();
+    },
+    error: function(data){
+    }
+  });
+  } 
+
+  function remove_course_material(course_material_id, row){
+
+    $.ajax({
+    type: "POST",
+    url : "http://127.0.0.1:8000/api/coursematerialdelete/",
+    data:  {"csrfmiddlewaretoken": window.CSRF_TOKEN, "course_material_id":course_material_id,"current_user_id":"{{current_user.id}}"},
+    dataType: "json",
+    success : function (data) {
+        row.remove();
+    },
+    error: function(data){
+    }   
+  });
+  } 
+
+  function load_course_feedback(){
+    $.ajax({
+        type: "GET",
+        url : "http://127.0.0.1:8000/api/coursefeedback/",
+        data:  {"csrfmiddlewaretoken": window.CSRF_TOKEN, "course_id":"{{course.course_id}}" },
+        dataType: "json",
+        success : function (data) {
+          var course_feedback_list = data['course_feedback_list']
+
+          var hostname = 'http://' + window.location.hostname;
+          $(".course_feedback").html('');
+
+          $.each(course_feedback_list, function(index, feedback){
+
+            var container = $('<div class="my-2 bg-body rounded shadow-sm"></div>')
+            var info = $('<div class="infocontainer d-inline-block pb-3 mb-0 lh-sm"></div>')
+            var username = $('<div class="username d-block mb-1">'+feedback.created_by_username+'</div>')
+            var created = $('<div class="post_create_date">'+feedback.created_date+'</div>')
+            var message = $('<div class="message d-block">'+feedback.message+'</div>')
+            
+            info.append(username).append(created).append(message);
+            container.append(info);
+            $(".course_feedback").append(container)
+          });          
+        },
+        error: function(data){
+          console.log(data)
+        }
+      });
+  }
+  
+  function post_course_feedback(){
+
+    if($("#taPostMessage").val() == '')
+      {
+        $(".post_error").html("Can't share empty feedback")
+        return;
+      }
+      $(".post_error").html("");
+
+    $.ajax({
+    type: "POST",
+    url : "http://127.0.0.1:8000/api/coursefeedback/",
+    data:  {"csrfmiddlewaretoken": window.CSRF_TOKEN, "created_by_id":"{{current_user.id}}",'course_id': "{{course.course_id}}",'message': $("#taPostMessage").val(),'created_by_username':"{{current_user.username}}"},
+    dataType: "json",
+    success : function (data) {
+        load_course_feedback()
+    },
+    error: function(data){
+    }
+  });
+  }
+
+  function update_course_user_status(user_course_id, action){
+
+    $.ajax({
+    type: "POST",
+    url : "http://127.0.0.1:8000/api/updateusercoursestatus/",
+    data:  {"csrfmiddlewaretoken": window.CSRF_TOKEN, "user_course_id":user_course_id,"action":action},
+    dataType: "json",
+    success : function (data) {
+        location.reload();
+    },
+    error: function(data){
+    }   
+    });
+  }
+
+  $(document).ready(
+    //bind events when the html document has been fully loaded    btn-sm btn_status block
+    $(".btnenrollcourse").click( function(ev) {
+        enroll_course();
+    }), 
+    $(".btn_status.block").click( function(ev) {
+        var user_course_id = $(this).attr('user_course_id');
+        update_course_user_status(user_course_id, 'block');
+    }),
+    $(".btn_status.unblock").click( function(ev) {
+        var user_course_id = $(this).attr('user_course_id');
+        update_course_user_status(user_course_id, 'unblock');
+    }),      
+    $(".btnaddcoursefeedback").click( function(ev) {
+        post_course_feedback();
+    }), 
+    $(".btnremovematerial").click( function(ev) {
+        var course_material_id = $(this).attr('course_material_id');
+        remove_course_material(course_material_id, $(this).parents('.row_material'));
+    }),
+    $(".btnsendchatmessage").click( function(ev) {
+        //sendMessage($("#taLiveChat").val())
+    }),
+    load_course_feedback()
+  );
+  
+</script>
+{% endblock %}

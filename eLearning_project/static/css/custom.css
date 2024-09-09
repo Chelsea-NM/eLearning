@@ -1,0 +1,363 @@
+:root {
+    --Alice-Blue: #f0f7f9;
+    --Sky-blue: #8ecae6;
+    --Blue-Green: #219ebc;
+    --Prussian-blue: #023047;
+    --Selective-yellow: #ffb703;
+    --UT-orange: #fb8500;
+    --Fire-engine-red: #d62828;
+    --Primary-theme-color:#E8352A;
+    --Secondary-theme-color:#E8772E;
+
+    --Top-Gradient: linear-gradient(0deg, var(--Alice-Blue), var(--Sky-blue), var(--Blue-Green), var(--Prussian-blue), var(--Selective-yellow), var(--UT-orange), var(--Fire-engine-red));
+    --Right-Gradient: linear-gradient(90deg, var(--Alice-Blue), var(--Sky-blue), var(--Blue-Green), var(--Prussian-blue), var(--Selective-yellow), var(--UT-orange), var(--Fire-engine-red));
+    --Bottom-Gradient: linear-gradient(180deg, var(--Alice-Blue), var(--Sky-blue), var(--Blue-Green), var(--Prussian-blue), var(--Selective-yellow), var(--UT-orange), var(--Fire-engine-red));
+    --Left-Gradient: linear-gradient(270deg, var(--Alice-Blue), var(--Sky-blue), var(--Blue-Green), var(--Prussian-blue), var(--Selective-yellow), var(--UT-orange), var(--Fire-engine-red));
+    --Top-Right-Gradient: linear-gradient(45deg, var(--Alice-Blue), var(--Sky-blue), var(--Blue-Green), var(--Prussian-blue), var(--Selective-yellow), var(--UT-orange), var(--Fire-engine-red));
+    --Bottom-Right-Gradient: linear-gradient(135deg, var(--Alice-Blue), var(--Sky-blue), var(--Blue-Green), var(--Prussian-blue), var(--Selective-yellow), var(--UT-orange), var(--Fire-engine-red));
+    --Top-Left-Gradient: linear-gradient(225deg, var(--Alice-Blue), var(--Sky-blue), var(--Blue-Green), var(--Prussian-blue), var(--Selective-yellow), var(--UT-orange), var(--Fire-engine-red));
+    --Bottom-Left-Gradient: linear-gradient(315deg, var(--Alice-Blue), var(--Sky-blue), var(--Blue-Green), var(--Prussian-blue), var(--Selective-yellow), var(--UT-orange), var(--Fire-engine-red));
+    --Radial-Gradient: radial-gradient(var(--Alice-Blue), var(--Sky-blue), var(--Blue-Green), var(--Prussian-blue), var(--Selective-yellow), var(--UT-orange), var(--Fire-engine-red));
+  }
+  
+
+  body {
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol", 'Playfair Display', serif;
+  }
+.course .lbldesc{
+display: inline-block;
+min-width: 95px;
+}
+.post_create_date {
+    position: absolute;
+    right: 15px;
+    top: 0px;
+    font-size: 12px;
+}
+.btn-warning{
+  color:white !important;
+}
+.row_enrolled_user a{
+  font-size: 13px !important;
+  font-weight: bold !important;
+  color: #212529bf !important;
+
+}
+.user_info .info{
+font-size: 14px;
+}
+.rounded-top {
+  border-top-left-radius: 0.375rem;
+}
+.rounded-bottom {
+  border-top-left-radius: 0.375rem;
+}
+.rounded-top-left-1 {
+  border-top-left-radius: 0.375rem;
+}
+.rounded-top-right-1 {
+  border-top-right-radius: 0.375rem;
+}
+.rounded-bottom-left-1 {
+  border-bottom-left-radius: 0.375rem;
+}
+.rounded-bottom-right-1 {
+  border-bottom-right-radius: 0.375rem;
+}
+.course_feedback .infocontainer {
+  width: 95%;
+  position: relative;
+}
+.row_enrolled_user .btn_status {
+  text-decoration: underline;
+  margin-right: 10px;
+  vertical-align: top;cursor: pointer;
+}
+
+.course_feedback .username,.row_enrolled_user .username,.row_material .username {
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--bs-secondary-color) !important;
+}
+.course_feedback .post_create_date{
+  color: var(--bs-secondary-color) !important;
+}
+.course_feedback .message {
+  font-size: 14px;
+}
+  .theme-color{
+    background-color: #ffd149;
+  }
+  /* I wrote this code */
+  .form-signup .errorlist{
+display: none;
+  }
+  .dvfriends .lbname{
+    color: black;
+    font-size: 14px;
+    text-decoration: none;
+  }
+  .btnAcceptFriendRequest{
+    font-size: 14px;
+    height: 28px;
+    line-height: 12.5px;
+  }
+  .avatar {
+    height: 3rem;
+    width: 3rem;
+    position: relative;
+    display: inline-block;
+    -ms-flex-negative: 0 !important;
+    flex-shrink: 0 !important;
+}  
+.friend .buttoncontainer{
+  margin-left: auto!important;    
+}
+.friend .btn{
+height: 32px;font-size: 14px;
+}
+.friend .infocontainer{
+width: 70%;
+}
+.dvposts .infocontainer{
+  width: 90%;position: relative;
+}
+.friend .info{
+font-size: 14px;
+}
+.nav-link.active{
+  font-weight: bold;
+  text-decoration: underline;
+}
+.dvfriends .avatar-2em{
+margin-top: 5px;  height: 2rem;
+width: 2rem;
+position: relative;
+display: inline-block;
+-ms-flex-negative: 0 !important;
+flex-shrink: 0 !important;
+}
+.dvposts .post_create_date{
+position:absolute;
+right: 15px;
+top:0px;font-size: 12px;
+}
+.dvposts .avatar-2em{
+  margin-top: 5px;  height: 2rem;
+  width: 2rem;
+  position: relative;
+  display: inline-block;
+  -ms-flex-negative: 0 !important;
+  flex-shrink: 0 !important;
+  }
+  .dvposts a{
+    vertical-align: top;
+  }
+  .dvposts{
+
+  }
+.dvfriends_side .lbname{
+  text-decoration: none;
+  font-size: 14px;
+  color: black;
+}
+.dvfriends_side .avatar-2em{
+  height: 1.5rem;
+  width:1.5rem;
+}
+.avatar-2em {
+
+}  
+.dvfriends .btn{
+line-height: 1.25!important;
+}
+.dvfriends .friend{
+
+}
+  .avatar-lg {
+    height: 4rem;
+    width: 4rem;
+}
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+  object-fit: cover;
+}
+.acc-leftbar i{
+  padding-right: 10px;  padding-left: 10px;
+  position: relative;
+  font-weight: 700;
+  width: 40px;
+}
+.avatar-xxl {
+  width: 8rem;
+  height: 8rem;
+}
+.mt-n5 {
+  margin-top: -3rem !important;
+}
+.h-50px {
+  height: 50px !important;
+}
+.h-150px {
+  height: 150px !important;
+}
+.h-200px {
+  height: 200px !important;
+}
+.dvavatar {
+  background-color: white;
+  border-radius: 30px;
+  margin-top: -3rem !important;
+}
+  .form-addanimal input[type=text]{
+    display: block;
+    width: 320px;
+    /* height: calc(1.5em + 0.75rem + 2px); */
+     padding: 0.375rem 0.75rem; 
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+  }
+  .btn-p-theme-bg{
+    background-color: var(--Primary-theme-color);
+    border: 1px solid var(--Secondary-theme-color);
+  }
+  .btn-s-theme-bg{
+    background-color: var(--Secondary-theme-color);
+    border: 1px solid var(--Primary-theme-color);
+  }
+  .form-addanimal textarea{
+    display: block;
+    width: 320px;
+    /* height: calc(1.5em + 0.75rem + 2px); */
+     padding: 0.375rem 0.75rem; 
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+  }
+  .form-addanimal select{
+    display: block;
+    width: 320px;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+  } 
+  #tbSearchUsers{
+    width: 240px;
+  }
+  .form-signin {
+    max-width: 330px;
+    padding: 15px;
+}
+.form-signin .control-group{
+  padding-bottom: 10px;
+}
+.form-signin label{
+
+}
+.form-signin .logo,.form-signin button{
+  display: block;
+  margin:auto;
+  }
+.form-signin form{
+margin-bottom: 10px;
+}
+.form-signin input[type=text],.form-signin input[type=password]{
+  display: block;
+  width: 100%;
+  /* height: calc(1.5em + 0.75rem + 2px); */
+   padding: 0.375rem 0.75rem; 
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.form-update-user-profile-picture .avatar-img{
+  width: 8rem;
+  height: 8rem;
+}
+.acc-leftbar .nav-item{
+  padding: 5px 10px 5px 10px;
+}
+.acc-leftbar .card-body{
+padding: 0;
+}
+.form-signup {
+  max-width: 330px;
+  padding: 15px;
+}
+.form-signup .control-group{
+padding-bottom: 10px;
+}
+.form-signup label{
+
+}
+.form-signup .logo,.form-signup button{
+display: block;
+margin:auto;
+}
+.form-signup form{
+margin-bottom: 10px;
+}
+.form-update-user-profile label{
+
+}
+.form-update-user-profile input[type=text],input[type=password]{
+  display: block;
+  width: 100%;
+  /* height: calc(1.5em + 0.75rem + 2px); */
+   padding: 0.375rem 0.75rem; 
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+  margin-bottom: 10px;
+  }
+.form-signup input[type=text],.form-signup input[type=password]{
+display: block;
+width: 100%;
+/* height: calc(1.5em + 0.75rem + 2px); */
+ padding: 0.375rem 0.75rem; 
+font-size: 1rem;
+font-weight: 400;
+line-height: 1.5;
+color: #495057;
+background-color: #fff;
+background-clip: padding-box;
+border: 1px solid #ced4da;
+border-radius: 0.25rem;
+transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+margin-bottom: 10px;
+}
+
+/* end of code I wrote */

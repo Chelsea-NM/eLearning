@@ -1,0 +1,174 @@
+<!-- I wrote this code -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <!-- Cover image/background -->
+            <div class="h-150px rounded-top" style="background-color:#6610f2; background-position: center; "></div>
+              <div class="card-body py-0">
+                <div class="d-sm-flex align-items-start text-center text-sm-start">
+                  <div>
+                    <!-- Avatar -->
+                    <div class="avatar avatar-xxl mt-n5 mb-3">
+                      {% if profile_picture %}
+                        <img class="avatar-img rounded-circle border border-white border-3 dvavatar" src="{{profile_picture.url}}" alt="">
+                      {% else %}
+                        {% load static %}
+                        <img class="avatar-img rounded-circle border border-white border-3 dvavatar" src="{% static 'images/avatar.png' %}" alt="">
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="ms-sm-4 mt-sm-3">
+                    <h1 class="mb-0 h5">{{ owner_user.username }}</h1>
+                  </div>
+                  <div class="d-flex mt-3 justify-content-center ms-sm-auto">
+                    {% if user.is_authenticated %}
+                      <!-- check if the current user is the owner of this profile and display button to edit profile -->
+                      {% if is_owner %}
+                        <a href="/user/profile/{{ user.id }}/update/details" class="nav-link px-2 link-dark"><button class="btn btn-warning" type="button"> <i class="bi bi-pencil-fill pe-1"></i> Edit profile </button></a>
+                      {% else %}
+                        <!-- if viewing another users profile check if the user has been added or invited as a friend and display appropriate button option -->
+                        {% if is_friend %}
+                        <div class="btn btn-outline-success">Friends</div>
+                        {% else %}
+                          {% if is_invited %}
+                            <div class="btn btn-warning">Invite Pending</div>     
+                          {% else %}
+                            {% if is_invitee %}
+                              <div contact_id="{{contact_id}}" class="btn btn-outline-success btnacceptfriendrequest">Accept Friend Request</div>  
+                            {% else %}
+                              <button id="btnAddFriend" class="btn btn-outline-success" type="button"> <i class="bi bi-person-fill-add pe-1"></i>Add Friend</button>
+                            {% endif %}
+                          {% endif %}
+                        {% endif %}
+                      {% endif %}    
+                    {% else %} {% endif %}
+                    
+                    <div style="display: none;" class="dropdown">
+                      <button class="icon-md btn btn-light" type="button" id="profileAction2" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-three-dots"></i>
+                      </button>
+                      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileAction2">
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#"> <i class="bi bi-gear fa-fw pe-2"></i>Profile settings</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <!-- profile info -->
+                <ul class="list-inline mb-3 text-center text-sm-start mt-3 mt-sm-0">
+                  {% if user_profile.occupation %}
+                  <li class="list-inline-item"><i class="bi bi-briefcase me-1"></i>{{user_profile.occupation}}</li>
+                  {% endif %}
+                  {% if user_profile.location %}
+                  <li class="list-inline-item"><i class="bi bi-briefcase me-1"></i>{{user_profile.location}}</li>
+                  {% endif %}
+                  <li class="list-inline-item"><i class="bi bi-calendar2-plus me-1"></i> {{owner_user.date_joined}} </li>
+                </ul>
+              </div>
+            </div>
+            {% if user.is_authenticated %}
+            <div class="dvposts">
+              {% for post in posts %}
+                {% if post.created_by_id == owner_user.id %}
+                  <div class="my-3 p-3 bg-body rounded shadow-sm">
+                      <a class="d-inline-block" style="width: 8%;" href="/user/profile/{{ post.created_by_id }}">
+                          {% load static %}
+                          {% if post.profile_picture %}
+                          <img class="avatar-2em me-2 rounded-circle" src="{{post.profile_picture}}" alt="">
+                          {% else %}
+                          {% load static %}
+                          <img class="avatar-2em  me-2 rounded-circle" src="{% static 'images/avatar.png' %}" alt="">
+                          {% endif %}
+                        </a>
+                        <div class="infocontainer d-inline-block pb-3 mb-0 lh-sm">
+                          <strong class="username d-block mb-1 text-gray-dark">{{post.username}}</strong><div class="post_create_date">{{post.created_date}}</div>
+                          <div class="info d-block">{{post.message}} </div>
+                          {% load static %}
+                          {% if post.media_image %}
+                          <div class="info d-block"><img style="max-width: 50%;" class="me-2 mt-2" src="{{post.media_image}}" alt=""/></div>
+                          {% else %}
+                          {% endif %}
+                        </div>
+                      
+                  </div>
+                {% endif %}  
+              {% endfor %} 
+            </div>
+            {% endif %}  
+
+        
+    </div>
+    <div class="col col-lg-4">
+        <div class="card">
+            <div class="card-header border-0 pb-0">
+              <h5 class="card-title">About</h5>
+            </div>
+            <label style="margin-left: 15px;margin-top: 2.5px;">{{owner_usertype}}</label>
+            <div class="card-body position-relative pt-0">
+              <!-- user & profile info -->
+              <ul class="list-unstyled mb-0">
+                {% if owner_user.first_name %}
+                <li> 
+                  {{owner_user.first_name}} 
+                  {% if owner_user.last_name %}
+                  {{owner_user.last_name}} 
+                  {% endif %}
+                </li>
+                {% endif %}
+                {% if user_profile.dob %}
+                <li class="mb-2"> <i class="bi bi-calendar-date fa-fw pe-1"></i> Born: <strong> {{user_profile.dob}} </strong> </li>
+                {% endif %}
+
+                {% if owner_user.email %}
+                <li> <i class="bi bi-envelope fa-fw pe-1"></i> Email: <strong> {{owner_user.email}} </strong> </li>
+                {% endif %}
+
+              </ul>
+            </div>
+          </div>
+    </div>
+</div>
+{% endblock %}
+{% block jquery %}
+<script type="text/javascript"> window.CSRF_TOKEN = "{{ csrf_token }}"; </script>
+<script type="text/javascript">
+      
+  $(document).ready(
+
+    //bind events when the html document has been fully loaded
+    $(".btnacceptfriendrequest").click( function() {
+      // ajax request to the myplace_api to accept a contact/friend request
+      $.ajax({
+        type: "POST",
+        url : "http://127.0.0.1:8000/api/acceptcontact/",
+        data:  {"csrfmiddlewaretoken": window.CSRF_TOKEN, "contact_id":$(this).attr('contact_id') },
+        dataType: "json",
+        success : function (data) {
+          window.location.reload();
+        },
+        error: function(data){
+        }
+      });
+    }),
+    $("#btnAddFriend").click( function() {
+      // ajax request to the myplace_api to create a contact/friend request
+      $.ajax({
+        type: "POST",
+        url : "http://127.0.0.1:8000/api/addcontact/",
+        data:  {"csrfmiddlewaretoken": window.CSRF_TOKEN, "created_by_id":"{{user.id}}", "user_id":"{{user.id}}" },
+        dataType: "json",
+        success : function (data) {
+          window.location.reload();
+        },
+        error: function(data){
+          console.log(data)
+        }
+      });
+    })
+  );
+</script>
+{% endblock %}
+<!-- end of code I wrote -->

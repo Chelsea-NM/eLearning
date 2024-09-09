@@ -1,0 +1,68 @@
+<!-- I wrote this code --> 
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="my-4 p-4 bg-body rounded shadow">
+<div class="mb-3"><h4><small class="text-body-secondary mb-1">{{course.title}} - Live Chat</small></h4></div>
+<textarea disabled  style="width: 100%;padding: 10px;" id="chat-log" cols="100" rows="20"></textarea><br>
+     <!-- <input id="chat-message-input" type="text" size="100"> -->
+    
+    <div class="card card-body mt-3">
+        <div class="d-flex mb-3">
+            <form class="w-100">
+                <textarea id="chat-message-input" class="form-control pe-4 border-0" rows="2" data-autoresize="" maxlength="255" placeholder="Send a message..."></textarea>
+            </form>
+        </div>
+        
+        <ul style="margin-left: auto;" class="nav nav-pills nav-stack small fw-normal">
+            <button  id="chat-message-submit" class="btn btn-warning btncreatestatusupdate" type="button"> <i class="bi bi-pencil-fill pe-1"></i> Send </button>                    
+        </ul>
+        <div class="post_error" style="color:red;"></div>
+    </div>
+</div>
+<br>
+
+{% endblock %}
+{% block jquery %}
+<script type="text/javascript"> window.CSRF_TOKEN = "{{ csrf_token }}"; </script>
+<script type="text/javascript">
+
+//const roomName = JSON.parse(document.getElementById('room-name').textContent);
+    const roomName = "{{course.course_id}}"
+    const chatSocket = new WebSocket(
+    'ws://'
+    + window.location.host
+    + '/ws/chat/'
+    + roomName
+    + '/'
+    );
+
+    chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            $("#chat-log").append( data.message + '\n');
+    };
+
+    chatSocket.onclose = function(e) {
+        $("#chat-log").append('There was a problem connecting to this chat server...' + '\n');
+            //console.error('Chat socket closed unexpectedly');
+            $(".btncreatestatusupdate").hide()
+    };
+
+  $(document).ready(
+    //bind events when the html document has been fully loaded   
+    $("#chat-message-submit").click( function() {
+        var dt = new Date();
+var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
+
+        chatSocket.send(JSON.stringify({
+                'message': "{{current_user.username}}: " + $("#chat-message-input").val()
+            }));
+
+            $("#chat-message-input").val('')
+    }),   
+
+  );
+  
+</script>
+{% endblock %}
+<!-- end of code I wrote -->

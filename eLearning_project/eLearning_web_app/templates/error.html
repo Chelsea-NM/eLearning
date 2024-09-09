@@ -1,0 +1,42 @@
+<!-- I wrote this code --> 
+{% extends 'empty.html' %}
+
+{% block content %}
+
+<div class="container py-5">
+    <div class="row">
+
+        {% if type == 'permissiondenied' %}
+
+        {% else %} {% endif %}
+
+        {% load static %}     
+        <a
+        href="/home"
+        class="text-center align-items-center mb-2 mb-lg-0 text-dark text-decoration-none"
+      >      
+      <img
+      src="{% static 'images/logo.png' %}"
+      alt="Logo"
+      class="bi me-2 mb-2"
+      role="img"
+      width="140px"
+      aria-label="Bootstrap"
+      />
+        </a>
+         <div class="col mt-2 text-center">
+              <h3>{{title}}</h3>
+              <p>{{message}}</p>
+
+              <div class="buttons">
+                <!--<a class="btn btn-outline-primary" href="javascript:history.back()">Back</a>-->
+                <a class="btn btn-outline-primary" href="/">Home</a>
+    
+            </div>
+         </div>
+    </div>
+</div>
+
+{% endblock %}
+
+<!-- end of code I wrote -->

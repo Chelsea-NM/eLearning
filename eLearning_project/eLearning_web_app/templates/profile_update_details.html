@@ -1,0 +1,51 @@
+<!-- I wrote this code --> 
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+
+<div class="my-4 p-4 bg-body rounded shadow">
+  <h4><small class="text-body-secondary">Update Profile Details</small></h4>
+  <div class="row pt-3">
+  {% include 'components/profile_update_sidenav.html' %}
+  <div class="col">
+      <div class="card p-3">  
+        <form class="form-update-user-profile" method="post" enctype="multipart/form-data">
+          <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+          <p>
+            <label for="id_firstname">Firstname:</label>
+            <input value="{{ user.first_name }}" type="text" name="firstname" maxlength="255" id="id_firstname">  
+          </p>  
+          <p>
+            <label for="id_lastname">Lastname:</label>
+            <input value="{{ user.last_name }}" type="text" name="lastname" maxlength="255" id="id_lastname">   
+          </p>
+          <p>
+            <label for="id_breed">Email:</label>
+            <input value="{{ user.email }}" type="text" name="email" maxlength="255" id="id_email">   
+          </p>
+          <p>
+            <label for="id_occupation">Occupation:</label>
+            <input value="{{ user_profile.occupation }}" type="text" name="occupation" maxlength="255" id="id_occupation">  
+          </p>
+          <p>
+            <label for="id_location">Location:</label>
+            <input type="text" value="{{ user_profile.location }}" name="location" maxlength="255" id="id_location">   
+          </p>
+          <p>
+            <label for="id_dob">Date of Birth:</label>
+            {{form.dob}}
+          </p>
+  
+          <button class="btn btn-warning" type="submit">Save</button>
+        </form>
+      
+  </div>
+</div>
+</div>
+
+{% else %} {% endif %}
+
+{% endblock %}
+<!-- end of code I wrote -->

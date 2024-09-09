@@ -1,0 +1,148 @@
+<!-- I wrote this code -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>eZ-eLearning</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    {% load static %}
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet" />
+
+    
+  </head>
+  <body>
+    <header class="p-3 mb-3 border-bottom">
+      <div class="container">
+        <div
+          class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start"
+        >
+          <a
+            href="/"
+            class="d-flex text-center align-items-center mb-2 mb-lg-0 text-dark text-decoration-none"
+          >
+            {% load static %}
+            <img
+              src="{% static 'images/logo.png' %}"
+              alt="Logo"
+              class="bi me-2"
+              role="img"
+              width="190px"
+              aria-label="Bootstrap"
+            />
+          </a>
+
+          <ul
+            class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0"
+          >
+
+            {% if user.is_authenticated %}
+
+            <li>
+              <a href="/" class="nav-link px-2 link-secondary {% if page == 'home' %}active{% endif %}">Home</a>
+            </li>
+            
+            
+            <!--<li><a href="/user/profile/{{ user.id }}" class="nav-link px-2 link-dark">Profile</a></li>-->
+            <li>
+              <a href="/my-courses" class="nav-link px-2 link-secondary  {% if page == 'myfriends' %}active{% endif %}">My Courses</a>
+            </li>
+
+            <li>
+              <a href="/search-courses" class="nav-link px-2 link-secondary  {% if page == 'myfriends' %}active{% endif %}">Find Courses</a>
+            </li>
+
+            {% if current_is_teacher %}
+            <li>
+              <a href="/users" class="nav-link px-2 link-secondary  {% if page == 'myfriends' %}active{% endif %}">Users</a>
+            </li>
+            {% endif %}
+
+            {% else %}
+
+            {% endif %}
+          </ul>
+
+          <form
+            style="display: none"
+            class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3"
+            role="search"
+          >
+            <input
+              type="search"
+              class="form-control"
+              placeholder="Search..."
+              aria-label="Search"
+            />
+          </form>
+          {% if user.is_authenticated %}
+          <div class="dropdown text-end">
+            <a
+              href="#"
+              class="d-block link-dark text-decoration-none dropdown-toggle"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              {% load static %}
+              {% if current_user_profile.profile_picture %}
+              <img 
+                alt="User"
+                width="32"
+                height="32"
+                class="rounded-circle" src="{{current_user_profile.profile_picture.url}}" alt="">
+              {% else %}
+              {% load static %}
+              <img alt="User"
+              width="32"
+              height="32"
+              class="rounded-circle" src="{% static 'images/avatar.png' %}" alt="">
+              {% endif %}
+
+              <label style="font-size: 14px">{{ current_user.username }}</label>
+            </a>
+            <ul class="dropdown-menu text-small">
+              <li><a class="dropdown-item" href="/user/profile/{{ current_user.id }}">Profile</a></li>
+              <li><a class="dropdown-item" href="/user/profile/{{ current_user.id }}/update/details">Details</a></li>
+              <li><a class="dropdown-item" href="/user/profile/{{ current_user.id }}/update/profilepicture">Profile Picture</a></li>
+              <li><hr class="dropdown-divider" /></li>
+              <li><a class="dropdown-item" href="/logout">Logout</a></li>
+            </ul>
+          </div>
+          {% else %}
+          <div class="text-end">
+            <a href="/signin" class="nav-link px-2 d-inline link-dark">Login</a>
+            <a href="/signup" class="nav-link px-2 d-inline link-dark"
+              >Sign Up</a
+            >
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      {% block breadcrumbs %} {% endblock %}
+      <div class="rounded">{% block content %} {% endblock %}</div>
+    </main>
+    <footer class="pt-5 my-5 text-muted border-top text-center">
+      Created by the MellowMoon · © 2023
+    </footer>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+      crossorigin="anonymous"
+    ></script>
+
+    {% block jquery %} {% endblock %}    
+  </body>
+</html>
+<!-- end of code I wrote -->
